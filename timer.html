@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Timer</title>
+<style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    label, input, button { margin: 5px; }
+</style>
+</head>
+<body>
+    <h1>Countdown Timer</h1>
+    <div>
+        <label for="hours">Hours:</label>
+        <input type="number" id="hours" min="0" value="0" />
+    </div>
+    <div>
+        <label for="minutes">Minutes:</label>
+        <input type="number" id="minutes" min="0" value="0" />
+    </div>
+    <div>
+        <label for="seconds">Seconds:</label>
+        <input type="number" id="seconds" min="0" value="0" />
+    </div>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Reset</button>
+    <h2 id="display">00:00:00</h2>
+<script>
+    let timer;
+    let timeLeft;
+
+    function displayTime(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        document.getElementById('display').innerText =
+            `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+        const hours = parseInt(document.getElementById('hours').value);
+        const minutes = parseInt(document.getElementById('minutes').value);
+        const seconds = parseInt(document.getElementById('seconds').value);
+        if (!timer) {
+            timeLeft = hours * 3600 + minutes * 60 + seconds;
+            timer = setInterval(() => {
+                timeLeft--;
+                displayTime(timeLeft);
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timer = null;
+                    alert("Time's up!");
+                }
+            }, 1000);
+        }
+    }
+
+    function pauseTimer() {
+        clearInterval(timer);
+        timer = null;
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        timer = null;
+        displayTime(0);
+    }
+
+    window.onload = function() {
+        displayTime(0);
+    };
+</script>
+</body>
+</html>
